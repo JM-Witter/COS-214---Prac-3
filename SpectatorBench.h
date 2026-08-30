@@ -30,7 +30,7 @@ public:
         }
     }
 
-    int capacity() const {
+    int getCapacity() const {
         return 50;
     }
 

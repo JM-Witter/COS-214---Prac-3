@@ -26,7 +26,7 @@ public:
         cout << "- Merch Stall [" << open << "]: " << stock << " Remaining stock" << endl;
     }
 
-    int capacity() const {
+    int getCapacity() const {
         return 2; // maybe 0?
     }
 

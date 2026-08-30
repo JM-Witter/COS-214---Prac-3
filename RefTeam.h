@@ -24,7 +24,7 @@ public:
         cout << "- Referee Team: " << numRefs << " referees " << (active ? "Active" : "on Standby") << endl;
     }
 
-    int capacity() const {
+    int getCapacity() const {
         return 0;
     }
 

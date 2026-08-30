@@ -6,25 +6,26 @@
 
 class TeamSet : public EventUnit {
 private:
-    int id;
     bool paused;
 
 public:
-    TeamSet(string name, int id) : EventUnit(name), id(id), paused(false) {}
+    TeamSet(string name) : EventUnit(name), paused(false) {}
 
     void open() {
-        cout << "- TeamSet " << id << ": Turning on setup" << endl;
+        cout << "- TeamSet " << ": Turning on setup" << endl;
+        paused = false;
     }
 
     void close() {
-        cout << "- TeamSet " << id << ": Switchin off" << endl;
+        cout << "- TeamSet " << ": Switchin off" << endl;
+        paused = true;
     }
 
     void reportStatus() const {
-        cout << "- TeamSet " << id << ": " << (paused ? "Paused" : "Active") << endl;
+        cout << "- TeamSet " << ": " << (paused ? "Paused" : "Active") << endl;
     }
 
-    int capacity() const {
+    int getCapacity() const {
         return 5;
     }
 

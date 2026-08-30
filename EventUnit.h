@@ -17,6 +17,13 @@ protected:
 public:
 	EventUnit(string u) : unitName(u) {};
 
+    void add(EventComponent* c) {
+        cout << "Cannot add child to Leaf (EventUnit)" << unitName << endl;
+    }
+
+    virtual void open() = 0;
+    virtual void close() = 0;
+
 	string getUnitName() const {
         return unitName;
     }
