@@ -7,24 +7,27 @@
 class MerchStall : public EventUnit {
 private:
     int stock;
+    bool open;
 
 public:
-    MerchStall(string name, int s) : EventUnit(name), stock(s) {}
+    MerchStall(string name, int s) : EventUnit(name), stock(s), open(false) {}
 
     void open() {
-        cout << "- MerchStall: Opening up" << endl;
+        cout << "- Merch Stall: Opening up" << endl;
+        open = true;
     }
 
     void close() {
-        cout << "- MerchStall: Closing" << endl;
+        cout << "- Merch Stall: Closing" << endl;
+        open = false;
     }
 
     void reportStatus() const {
-        cout << "- MerchStall: " << stock << " Remaining stock" << endl;
+        cout << "- Merch Stall [" << open << "]: " << stock << " Remaining stock" << endl;
     }
 
     int capacity() const {
-        return 0;
+        return 2; // maybe 0?
     }
 
     ~MerchStall() {}
