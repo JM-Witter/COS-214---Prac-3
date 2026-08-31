@@ -37,7 +37,7 @@ public:
         // Observer stuff
         // detatch observer from component
 
-        for (int i = 0; i < children.size(); i++)
+        for (int i = 0; i < (int) children.size(); i++)
         {
             if (children[i] == c) {
                 children.erase(children.begin() + i);

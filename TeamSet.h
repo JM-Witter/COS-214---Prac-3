@@ -11,12 +11,12 @@ private:
 public:
     TeamSet(string name) : EventUnit(name), paused(false) {}
 
-    void open() {
+    void open() override {
         cout << "- TeamSet " << ": Turning on setup" << endl;
         paused = false;
     }
 
-    void close() {
+    void close() override {
         cout << "- TeamSet " << ": Switchin off" << endl;
         paused = true;
     }

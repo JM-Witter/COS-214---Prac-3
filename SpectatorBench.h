@@ -12,12 +12,12 @@ private:
 public:
     SpectatorBench(string name, int s) : EventUnit(name), seated(s), available(false) {}
 
-    void open() {
+    void open() override {
         cout << "- Spectator Bench: Now available" << endl;
         available = true;
     }
 
-    void close() {
+    void close() override {
         cout << "- Spectator Bench: Closing" << endl;
         available = true;
     }

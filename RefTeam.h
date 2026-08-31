@@ -12,11 +12,11 @@ private:
 public:
     RefTeam(string name, int n) : EventUnit(name), numRefs(n) {}
 
-    void open() {
+    void open() override {
         cout << "- Referee Team: Opening up" << endl;
     }
 
-    void close() {
+    void close() override {
         cout << "- Referee Team: Closing" << endl;
     }
 

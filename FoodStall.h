@@ -7,23 +7,23 @@
 class FoodStall : public EventUnit {
 private:
     vector<string> menu;
-    bool open;
+    bool opened;
 
 public:
-    FoodStall(string name, vector<string> m) : EventUnit(name), menu(m), open(false) {}
+    FoodStall(string name, vector<string> m) : EventUnit(name), menu(m), opened(false) {}
 
-    void open() {
+    void open() override {
         cout << "- Food Stall: Opening up" << endl;
-        open = true;
+        opened = true;
     }
 
-    void close() {
+    void close() override {
         cout << "- Food Stall: Closing" << endl;
-        open = false;
+        opened = false;
     }
 
     void reportStatus() const {
-        cout << "- Food Stall [" << open << "] Menu: ";
+        cout << "- Food Stall [" << opened << "] Menu: ";
 
 
         for (string m : menu) {
