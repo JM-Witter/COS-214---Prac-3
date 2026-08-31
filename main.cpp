@@ -2,6 +2,10 @@
 #include "EventGroup.h"
 #include "EventUnit.h"
 
+#include "MainVenue.h"
+#include "Lounge.h"
+#include "Stage.h"
+
 #include "FoodStall.h"
 #include "MerchStall.h"
 #include "RefTeam.h"
@@ -31,9 +35,9 @@ int main() {
     SpectatorBench* ls = new SpectatorBench("Lounge Seating", 10);
     SpectatorBench* sb = new SpectatorBench("Stage Benches", 50);
 
-    EventGroup* mainVenue = new EventGroup("Main Tournament Venue");
-    EventGroup* stage = new EventGroup("Tournament Stage");
-    EventGroup* lounge = new EventGroup("Lounge Area");
+    EventGroup* mainVenue = new MainVenue("Main Tournament Venue");
+    EventGroup* stage = new Stage("Tournament Stage");
+    EventGroup* lounge = new Lounge("Lounge Area");
 
     lounge->add(fs);
     lounge->add(ms);

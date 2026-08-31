@@ -18,7 +18,7 @@ protected:
 public:
 	EventGroup(string g) : groupName(g) {};
 
-	virtual void add(EventComponent* c) {
+	void add(EventComponent* c) {
         if (!c) {
             return;
         }
@@ -29,7 +29,7 @@ public:
         // attach observer to component
     }
 
-    virtual void remove(EventComponent* c) {
+    void remove(EventComponent* c) {
         if (!c) {
             return;
         }
@@ -45,43 +45,15 @@ public:
                 break;
             }
         }
-    }
+    };
 
-    void open() {
-        cout << groupName << ": Opening area" << endl;
+    virtual void open() = 0;
+    virtual void close() = 0;
 
-        for (EventComponent* c : children) {
-            c->open();
-        }
-    }
-
-    void close() {
-        cout << groupName << ": Closing area" << endl;
-
-        for (EventComponent* c : children) {
-            c->close();
-        }
-    }
-
-    void reportStatus() const {
-        cout << groupName << ": " << children.size() << " composites" << endl;
-
-        for (EventComponent* c : children) {
-            c->reportStatus();
-        }
-    }
-
-    int getCapacity() const {
-        int total = 0;
-
-        for (EventComponent* c : children) {
-            total += c->getCapacity();
-        }
-
-        return total;
-    }
-
-	virtual ~EventGroup() {
+    virtual void reportStatus() const = 0;
+    virtual int getCapacity() const = 0;
+    
+    virtual ~EventGroup() {
         for (EventComponent* c : children) {
             delete c;
         }
@@ -90,7 +62,7 @@ public:
     }
 
     // Observer update 
-    // void update (...) {} 
+    // virtual void update (...) {} 
 };
 
 #endif 
