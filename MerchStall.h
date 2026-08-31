@@ -13,17 +13,17 @@ public:
     MerchStall(string name, int s) : EventUnit(name), stock(s), opened(false) {}
 
     void open() override {
-        cout << "- Merch Stall: Opening up" << endl;
+        cout << "- Merch Stall: Opening up " << unitName << endl;
         opened = true;
     }
 
     void close() override {
-        cout << "- Merch Stall: Closing" << endl;
+        cout << "- Merch Stall: Closing " << unitName << endl;
         opened = false;
     }
 
     void reportStatus() const {
-        cout << "- Merch Stall [" << opened << "]: " << stock << " Remaining stock" << endl;
+        cout << "- Merch Stall [" << (opened ? "Open" : "Closed") << "]: " << stock << " Remaining stock" << endl;
     }
 
     int getCapacity() const {

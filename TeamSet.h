@@ -12,17 +12,17 @@ public:
     TeamSet(string name) : EventUnit(name), paused(false) {}
 
     void open() override {
-        cout << "- TeamSet " << ": Turning on setup" << endl;
+        cout << "- Team Set [" << unitName << "]: Turning on setup" << endl;
         paused = false;
     }
 
     void close() override {
-        cout << "- TeamSet " << ": Switchin off" << endl;
+        cout << "- Team Set [" << unitName << "]: Switchin off" << endl;
         paused = true;
     }
 
     void reportStatus() const {
-        cout << "- TeamSet " << ": " << (paused ? "Paused" : "Active") << endl;
+        cout << "- Team Set [" << unitName << "]: " << (paused ? "Paused" : "Active") << endl;
     }
 
     int getCapacity() const {

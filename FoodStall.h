@@ -13,17 +13,17 @@ public:
     FoodStall(string name, vector<string> m) : EventUnit(name), menu(m), opened(false) {}
 
     void open() override {
-        cout << "- Food Stall: Opening up" << endl;
+        cout << "- Food Stall: Opening up " << unitName << endl;
         opened = true;
     }
 
     void close() override {
-        cout << "- Food Stall: Closing" << endl;
+        cout << "- Food Stall: Closing " << unitName << endl;
         opened = false;
     }
 
     void reportStatus() const {
-        cout << "- Food Stall [" << opened << "] Menu: ";
+        cout << "- Food Stall [" << (opened ? "Open" : "Closed") << "] Menu: ";
 
 
         for (string m : menu) {

@@ -13,15 +13,17 @@ public:
     RefTeam(string name, int n) : EventUnit(name), numRefs(n) {}
 
     void open() override {
-        cout << "- Referee Team: Opening up" << endl;
+        cout << "- Referee Team: " << unitName << " is now active" << endl;
+        active = true;
     }
 
     void close() override {
-        cout << "- Referee Team: Closing" << endl;
+        cout << "- Referee Team: " << unitName << " will be on standby" << endl;
+        active = false;
     }
 
     void reportStatus() const {
-        cout << "- Referee Team: " << numRefs << " referees " << (active ? "Active" : "on Standby") << endl;
+        cout << "- Referee Team: " << numRefs << " referees " << (active ? "currently Active" : "on Standby") << " in " << unitName << endl;
     }
 
     int getCapacity() const {

@@ -45,7 +45,9 @@ int main() {
     cout << "Total Capacity: " << mainVenue->getCapacity() << endl;
 
     mainVenue->open();
+    cout << endl << endl;
     mainVenue->reportStatus();
+    cout << endl << endl;
     mainVenue->close();
 
     delete mainVenue;

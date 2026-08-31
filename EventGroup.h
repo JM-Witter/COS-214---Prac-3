@@ -59,12 +59,12 @@ public:
         cout << groupName << ": Closing area" << endl;
 
         for (EventComponent* c : children) {
-            c->open();
+            c->close();
         }
     }
 
     void reportStatus() const {
-        cout << groupName << ": " << children.size() << " sub/concrete components" << endl;
+        cout << groupName << ": " << children.size() << " composites" << endl;
 
         for (EventComponent* c : children) {
             c->reportStatus();
