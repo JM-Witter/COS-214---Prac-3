@@ -28,16 +28,21 @@ int main() {
     FoodStall* fs = new FoodStall("General Snacks Stall", menu);
     MerchStall* ms = new MerchStall("Tetris Merch Stall", 30);
 
+    SpectatorBench* ls = new SpectatorBench("Lounge Seating", 10);
+    SpectatorBench* sb = new SpectatorBench("Stage Benches", 50);
+
     EventGroup* mainVenue = new EventGroup("Main Tournament Venue");
     EventGroup* stage = new EventGroup("Tournament Stage");
     EventGroup* lounge = new EventGroup("Lounge Area");
 
     lounge->add(fs);
     lounge->add(ms);
+    lounge->add(ls);
 
     stage->add(red);
     stage->add(blue);
     stage->add(rf);
+    stage->add(sb);
 
     mainVenue->add(stage);
     mainVenue->add(lounge);
@@ -46,6 +51,10 @@ int main() {
 
     mainVenue->open();
     cout << endl << endl;
+
+    ls->addSeated(3);
+    sb->addSeated(24);
+
     mainVenue->reportStatus();
     cout << endl << endl;
     mainVenue->close();
