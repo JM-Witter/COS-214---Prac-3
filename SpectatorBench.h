@@ -2,66 +2,44 @@
 #define SPECTATORBENCH_H
 
 #include "EventUnit.h"
+
 #include <iostream>
 
 class SpectatorBench : public EventUnit {
-private:
-    int capacity, seated; 
-    bool available; // like if its closed off or not
-
 public:
-    SpectatorBench(string name, int s) : EventUnit(name), capacity(s), available(false) {}
+    SpectatorBench(const std::string& name, int maxCapacity)
+        : EventUnit(name), capacity(maxCapacity), seated(0), available(false) {}
 
-    void open() override {
-        cout << "- Spectator Bench (" << unitName << "): Now available" << endl;
-        available = true;
+    void open() override { available = true; std::cout << "- Spectator Bench (" << unitName << "): available" << std::endl; }
+    void close() override { available = false; std::cout << "- Spectator Bench (" << unitName << "): closed" << std::endl; }
+    void reportStatus() const override {
+        std::cout << "- Spectator Bench (" << unitName << "): " << (available ? std::to_string(seated) + " seated" : "closed") << std::endl;
+    }
+    int getCapacity() const override { return capacity; }
+
+    void addSeated(int number) {
+        if (!available) { std::cout << "- Spectator Bench: currently closed" << std::endl; return; }
+        if (number < 0 || seated + number > capacity) { std::cout << "- Spectator Bench: not enough space" << std::endl; return; }
+        seated += number;
     }
 
-    void close() override {
-        cout << "- Spectator Bench (" << unitName << "): Closing" << endl;
-        available = true;
-    }
-
-    void reportStatus() const {
-        if (available) {
-            cout << "- Spectator Bench (" << unitName << "): " << seated << " seated spectators" << endl;
-        } else {
-            cout << "- Spectator Bench (" << unitName << "): currently closed" << endl;
+    void update(const EventNotice& notice) override {
+        if (notice.type == NoticeType::CapacityAlert && seated >= notice.value) {
+            std::cout << "- Spectator Bench (" << unitName << "): capacity threshold reached; entry restricted" << std::endl;
+        } else if (notice.type == NoticeType::Evacuate) {
+            seated = 0;
+            close();
+        } else if (notice.type == NoticeType::Open) {
+            open();
         }
     }
 
-    int getCapacity() const {
-        return capacity;
-    }
+    ~SpectatorBench() override {}
 
-    void addSeated(int n) {
-        if (available) {
-            if ((seated + n) > capacity) {
-                cout << "Not enough space" << endl;
-            } else {
-                seated += n;
-            }
-        } else {
-            cout << "Spectator bench is currently closed and cannot get spectators" << endl;
-        }
-    }
-
-    void removeSeated(int n) {
-        if (available) {
-            if ((seated - n) < 0) {
-                seated = 0;
-            } else {
-                seated -= n;
-            }
-        } else {
-            cout << "Spectator bench is currently closed and cannot get spectators" << endl;
-        }
-    }
-
-    ~SpectatorBench() {}
-
-    // Observer
-    // void update (...) {}
+private:
+    int capacity;
+    int seated;
+    bool available;
 };
 
 #endif

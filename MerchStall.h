@@ -2,38 +2,30 @@
 #define MERCHSTALL_H
 
 #include "EventUnit.h"
+
 #include <iostream>
 
 class MerchStall : public EventUnit {
+public:
+    MerchStall(const std::string& name, int initialStock) : EventUnit(name), stock(initialStock), opened(false) {}
+
+    void open() override { opened = true; std::cout << "- Merch Stall: opening " << unitName << std::endl; }
+    void close() override { opened = false; std::cout << "- Merch Stall: closing " << unitName << std::endl; }
+    void reportStatus() const override { std::cout << "- Merch Stall [" << (opened ? "open" : "closed") << "]: " << stock << " items in stock" << std::endl; }
+    int getCapacity() const override { return 2; }
+
+    void update(const EventNotice& notice) override {
+        if (notice.type == NoticeType::Evacuate) close();
+        else if (notice.type == NoticeType::ScheduleChange) std::cout << "- Merch Stall: updating merchandise promotion schedule" << std::endl;
+        else if (notice.type == NoticeType::Open) open();
+        else if (notice.type == NoticeType::Close) close();
+    }
+
+    ~MerchStall() override {}
+
 private:
     int stock;
     bool opened;
-
-public:
-    MerchStall(string name, int s) : EventUnit(name), stock(s), opened(false) {}
-
-    void open() override {
-        cout << "- Merch Stall: Opening up " << unitName << endl;
-        opened = true;
-    }
-
-    void close() override {
-        cout << "- Merch Stall: Closing " << unitName << endl;
-        opened = false;
-    }
-
-    void reportStatus() const {
-        cout << "- Merch Stall [" << (opened ? "Open" : "Closed") << "]: " << stock << " Remaining stock" << endl;
-    }
-
-    int getCapacity() const {
-        return 2; // maybe 0?
-    }
-
-    ~MerchStall() {}
-
-    // Observer
-    // void update (...) {}
 };
 
 #endif
