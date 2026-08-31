@@ -3,6 +3,12 @@
 
 #include "EventGroup.h"
 
+/**
+ * @class Lounge
+ * @brief Represents a lounge area containing multiple event components.
+ * Lounge is an EventGroup that fulfills the Concrete Composite role in
+ * the Composite design pattern.
+ */
 class Lounge : public EventGroup {
 public:
     explicit Lounge(const std::string& name) : EventGroup(name), servicesSuspended(false) {}
@@ -23,6 +29,7 @@ protected:
     }
 
 private:
+    /** @brief Indicates whether the lounge's services are currently suspended. */
     bool servicesSuspended;
 };
 

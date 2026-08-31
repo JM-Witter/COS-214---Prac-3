@@ -5,6 +5,13 @@
 
 #include <iostream>
 
+/**
+ * @class SpectatorBench
+ * @brief Represents a seating area for spectators at an event.
+ * SpectatorBench is an EventUnit that manages spectator seating,
+ * including its maximum capacity and the current number of seated
+ * spectators.
+ */
 class SpectatorBench : public EventUnit {
 public:
     SpectatorBench(const std::string& name, int maxCapacity)
@@ -37,8 +44,11 @@ public:
     ~SpectatorBench() override {}
 
 private:
+    /** @brief The maximum number of spectators that can be seated. */
     int capacity;
+    /** @brief The current number of spectators seated on the bench. */
     int seated;
+    /** @brief Indicates whether the spectator bench is currently available. */
     bool available;
 };
 

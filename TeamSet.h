@@ -5,6 +5,12 @@
 
 #include <iostream>
 
+/**
+ * @class TeamSet
+ * @brief Represents a team-related event unit with power and pause states.
+ * TeamSet is an EventUnit that manages the operational state of a team
+ * set.
+ */
 class TeamSet : public EventUnit {
 public:
     explicit TeamSet(const std::string& name) : EventUnit(name), powered(false), paused(false) {}
@@ -28,7 +34,9 @@ public:
     ~TeamSet() override {}
 
 private:
+    /** @brief Indicates whether the team set is currently powered on. */
     bool powered;
+    /** @brief Indicates whether the team set is currently paused. */
     bool paused;
 };
 

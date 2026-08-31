@@ -1,0 +1,21 @@
+PROJECT_NAME           = "EventFlow"
+
+OUTPUT_DIRECTORY       = docs
+
+INPUT                  = .
+
+RECURSIVE              = YES
+
+GENERATE_HTML          = YES
+
+GENERATE_LATEX         = NO
+
+EXTRACT_ALL            = NO
+
+WARNINGS               = YES
+
+WARN_IF_UNDOCUMENTED   = YES
+
+WARN_IF_DOC_ERROR      = YES
+
+FILE_PATTERNS          = *.h

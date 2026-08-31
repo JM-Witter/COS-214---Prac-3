@@ -3,6 +3,11 @@
 
 #include "EventGroup.h"
 
+/**
+ * @class MainVenue
+ * @brief Represents the main venue area containing multiple event components.
+ * MainVenue is an EventGroup that manages a collection of event components.
+ */
 class MainVenue : public EventGroup {
 public:
     explicit MainVenue(const std::string& name) : EventGroup(name), emergencyMode(false) {}
@@ -23,6 +28,7 @@ protected:
     }
 
 private:
+    /** @brief Indicates whether the main venue is currently in emergency mode. */
     bool emergencyMode;
 };
 

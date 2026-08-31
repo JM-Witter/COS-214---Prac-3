@@ -8,6 +8,12 @@
 
 using namespace std;
 
+/**
+ * @class FoodStall
+ * @brief Represents a food stall at an event.
+ * FoodStall is an EventUnit that provides food services and maintains
+ * a menu of available items.
+ */
 class FoodStall : public EventUnit {
 public:
     FoodStall(const string& name, const vector<string>& items)
@@ -30,8 +36,11 @@ public:
     ~FoodStall() override {}
 
 private:
+    /** @brief Stores the food and beverage items available at the stall. */
     vector<string> menu;
+    /** @brief Indicates whether the food stall is currently open. */
     bool opened;
+    /** @brief Indicates whether food service has been temporarily suspended. */
     bool serviceSuspended;
 };
 

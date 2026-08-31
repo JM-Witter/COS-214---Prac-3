@@ -5,6 +5,13 @@
 
 #include <iostream>
 
+/**
+ * @class MerchStall
+ * @brief Represents a merchandise stall at an event.
+ * MerchStall is an EventUnit that manages merchandise stock and
+ * responds to event notices such as opening, closing, evacuation,
+ * and schedule changes.
+ */
 class MerchStall : public EventUnit {
 public:
     MerchStall(const std::string& name, int initialStock) : EventUnit(name), stock(initialStock), opened(false) {}
@@ -24,7 +31,9 @@ public:
     ~MerchStall() override {}
 
 private:
+    /** @brief The number of merchandise items currently in stock. */
     int stock;
+    /** @brief Indicates whether the merchandise stall is currently open. */
     bool opened;
 };
 

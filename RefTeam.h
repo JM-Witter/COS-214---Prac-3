@@ -5,6 +5,12 @@
 
 #include <iostream>
 
+/**
+ * @class RefTeam
+ * @brief Represents a team of referees responsible for overseeing event matches.
+ * RefTeam is an EventUnit that manages a group of referees and tracks
+ * whether they are actively overseeing matches or on standby.
+ */
 class RefTeam : public EventUnit {
 public:
     RefTeam(const std::string& name, int refereeCount) : EventUnit(name), numRefs(refereeCount), active(false) {}
@@ -28,7 +34,9 @@ public:
     ~RefTeam() override {}
 
 private:
+    /** @brief The number of referees in the team. */
     int numRefs;
+    /** @brief Indicates whether the referee team is currently active. */
     bool active;
 };
 

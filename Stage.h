@@ -3,6 +3,12 @@
 
 #include "EventGroup.h"
 
+/**
+ * @class Stage
+ * @brief Represents a stage area containing components for event matches.
+ * Stage is an EventGroup that manages multiple event components and
+ * tracks whether the match flow is currently paused.
+ */
 class Stage : public EventGroup {
 public:
     explicit Stage(const std::string& name) : EventGroup(name), matchPaused(false) {}
@@ -23,6 +29,7 @@ protected:
     }
 
 private:
+    /** @brief Indicates whether the match flow on the stage is currently paused. */
     bool matchPaused;
 };
 
