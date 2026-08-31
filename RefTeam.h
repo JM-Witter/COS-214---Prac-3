@@ -2,38 +2,34 @@
 #define REFTEAM_H
 
 #include "EventUnit.h"
+
 #include <iostream>
 
 class RefTeam : public EventUnit {
-private:
-    int numRefs; // or ref names, idk
-    bool active;
-
 public:
-    RefTeam(string name, int n) : EventUnit(name), numRefs(n) {}
+    RefTeam(const std::string& name, int refereeCount) : EventUnit(name), numRefs(refereeCount), active(false) {}
 
-    void open() override {
-        cout << "- Referee Team: " << unitName << " is now active" << endl;
-        active = true;
+    void open() override { active = true; std::cout << "- Referee Team: " << unitName << " is active" << std::endl; }
+    void close() override { active = false; std::cout << "- Referee Team: " << unitName << " is on standby" << std::endl; }
+    void reportStatus() const override { std::cout << "- Referee Team: " << numRefs << " referees " << (active ? "actively overseeing matches" : "on standby") << std::endl; }
+    int getCapacity() const override { return 0; }
+
+    void update(const EventNotice& notice) override {
+        if (notice.type == NoticeType::Evacuate) {
+            active = true;
+            std::cout << "- Referee Team: directing players and spectators to exits" << std::endl;
+        } else if (notice.type == NoticeType::Open) {
+            open();
+        } else if (notice.type == NoticeType::Close) {
+            close();
+        }
     }
 
-    void close() override {
-        cout << "- Referee Team: " << unitName << " will be on standby" << endl;
-        active = false;
-    }
+    ~RefTeam() override {}
 
-    void reportStatus() const {
-        cout << "- Referee Team: " << numRefs << " referees " << (active ? "currently Active" : "on Standby") << " in " << unitName << endl;
-    }
-
-    int getCapacity() const {
-        return 0;
-    }
-
-    ~RefTeam() {}
-
-    // Observer
-    // void update (...) {}
+private:
+    int numRefs;
+    bool active;
 };
 
 #endif

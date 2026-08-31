@@ -1,31 +1,46 @@
 #ifndef EVENTUNIT_H
 #define EVENTUNIT_H
 
-// Leaf
-
 #include "EventComponent.h"
-#include <iostream>
-#include <vector>
+#include "Observer.h"
+#include "Subject.h"
+
+#include <algorithm>
 #include <string>
+#include <vector>
 
 using namespace std;
 
-class EventUnit : public EventComponent {
+class EventUnit : public EventComponent, public Observer {
 protected:
+    explicit EventUnit(const string& name) : unitName(name) {}
     string unitName;
 
 public:
-	EventUnit(string u) : unitName(u) {};
-
-    void add(EventComponent* c) {
-        cout << "Cannot add child to Leaf (EventUnit)" << unitName << endl;
+    void subscribeTo(Subject& subject) {
+        if (find(subscriptions.begin(), subscriptions.end(), &subject) == subscriptions.end()) {
+            subject.attach(this);
+            subscriptions.push_back(&subject);
+        }
     }
 
-	string getUnitName() const {
-        return unitName;
+    void unsubscribeFrom(Subject& subject) {
+        subject.detach(this);
+        subscriptions.erase(remove(subscriptions.begin(), subscriptions.end(), &subject), subscriptions.end());
     }
 
-	virtual ~EventUnit() {}
+    const string& getUnitName() const { return unitName; }
+    virtual ~EventUnit() { detachAll(); }
+
+private:
+    vector<Subject*> subscriptions;
+
+    void detachAll() {
+        for (vector<Subject*>::iterator it = subscriptions.begin(); it != subscriptions.end(); ++it) {
+            (*it)->detach(this);
+        }
+        subscriptions.clear();
+    }
 };
 
-#endif 
+#endif

@@ -1,69 +1,85 @@
-#include "EventComponent.h"
-#include "EventGroup.h"
-#include "EventUnit.h"
-
-#include "MainVenue.h"
-#include "Lounge.h"
-#include "Stage.h"
-
+#include "EventControl.h"
 #include "FoodStall.h"
+#include "Lounge.h"
+#include "MainVenue.h"
 #include "MerchStall.h"
 #include "RefTeam.h"
 #include "SpectatorBench.h"
+#include "Stage.h"
 #include "TeamSet.h"
 
 #include <iostream>
+#include <memory>
 #include <vector>
-#include <string>
 
 using namespace std;
 
 int main() {
-    TeamSet* red = new TeamSet("Red Team Table");
-    TeamSet* blue = new TeamSet("Blue Team Table");
-    RefTeam* rf = new RefTeam("Ref Squad 1", 3);
+    EventControl control;
+    unique_ptr<MainVenue> mainVenue(new MainVenue("Main Tournament Venue"));
+    unique_ptr<Stage> stage(new Stage("Tournament Stage"));
+    unique_ptr<Lounge> lounge(new Lounge("Lounge Area"));
+    Stage* stageArea = stage.get();
+    Lounge* loungeArea = lounge.get();
 
-    vector<string> menu;
-    menu.push_back("Breadsticks");
-    menu.push_back("Chips");
-    menu.push_back("Water");
-    menu.push_back("Coffee");
+    unique_ptr<TeamSet> redOwner(new TeamSet("Red Team Table"));
+    unique_ptr<TeamSet> blueOwner(new TeamSet("Blue Team Table"));
+    unique_ptr<RefTeam> refereesOwner(new RefTeam("Ref Squad 1", 3));
+    unique_ptr<SpectatorBench> stageBenchesOwner(new SpectatorBench("Stage Benches", 50));
+    unique_ptr<FoodStall> foodOwner(new FoodStall("General Snacks Stall", vector<string>{"Breadsticks", "Chips", "Water", "Coffee"}));
+    unique_ptr<MerchStall> merchOwner(new MerchStall("Tetris Merch Stall", 30));
+    unique_ptr<SpectatorBench> loungeBenchesOwner(new SpectatorBench("Lounge Seating", 10));
 
-    FoodStall* fs = new FoodStall("General Snacks Stall", menu);
-    MerchStall* ms = new MerchStall("Tetris Merch Stall", 30);
+    TeamSet* red = redOwner.get();
+    TeamSet* blue = blueOwner.get();
+    RefTeam* referees = refereesOwner.get();
+    SpectatorBench* stageBenches = stageBenchesOwner.get();
+    FoodStall* food = foodOwner.get();
+    MerchStall* merch = merchOwner.get();
+    SpectatorBench* loungeBenches = loungeBenchesOwner.get();
 
-    SpectatorBench* ls = new SpectatorBench("Lounge Seating", 10);
-    SpectatorBench* sb = new SpectatorBench("Stage Benches", 50);
+    stage->add(move(redOwner));
+    stage->add(move(blueOwner));
+    stage->add(move(refereesOwner));
+    stage->add(move(stageBenchesOwner));
+    lounge->add(move(foodOwner));
+    lounge->add(move(merchOwner));
+    lounge->add(move(loungeBenchesOwner));
 
-    EventGroup* mainVenue = new MainVenue("Main Tournament Venue");
-    EventGroup* stage = new Stage("Tournament Stage");
-    EventGroup* lounge = new Lounge("Lounge Area");
+    mainVenue->add(unique_ptr<EventComponent>(stage.release()));
+    mainVenue->add(unique_ptr<EventComponent>(lounge.release()));
 
-    lounge->add(fs);
-    lounge->add(ms);
-    lounge->add(ls);
+    MainVenue* venue = mainVenue.get();
+    venue->subscribeTo(control);
+    stageArea->subscribeTo(*venue);
+    loungeArea->subscribeTo(*venue);
+    red->subscribeTo(*stageArea);
+    red->subscribeTo(*stageArea); // Duplicate registration is intentionally harmless.
+    blue->subscribeTo(*stageArea);
+    referees->subscribeTo(*stageArea);
+    stageBenches->subscribeTo(*stageArea);
+    food->subscribeTo(*loungeArea);
+    merch->subscribeTo(*loungeArea);
+    loungeBenches->subscribeTo(*loungeArea);
 
-    stage->add(red);
-    stage->add(blue);
-    stage->add(rf);
-    stage->add(sb);
+    cout << "\nComposite tree built. Total capacity: " << venue->getCapacity() << endl;
+    control.issue(EventNotice(NoticeType::Open, "Doors open"));
+    stageBenches->addSeated(24);
+    loungeBenches->addSeated(3);
 
-    mainVenue->add(stage);
-    mainVenue->add(lounge);
+    control.issue(EventNotice(NoticeType::NetworkPause, "Tournament network instability"));
+    control.issue(EventNotice(NoticeType::CapacityAlert, "Seating capacity warning", 20));
 
-    cout << "Total Capacity: " << mainVenue->getCapacity() << endl;
+    cout << "\n[Reorganisation] Moving the merch stall from the lounge to the stage." << endl;
+    merch->unsubscribeFrom(*loungeArea);
+    unique_ptr<EventComponent> relocated = loungeArea->remove(merch);
+    stageArea->add(move(relocated));
+    merch->subscribeTo(*stageArea);
 
-    mainVenue->open();
-    cout << endl << endl;
+    cout << "[Registration change] The blue team table unsubscribes from stage notices." << endl;
+    blue->unsubscribeFrom(*stageArea);
+    control.issue(EventNotice(NoticeType::Evacuate, "Evacuate the venue"));
 
-    ls->addSeated(3);
-    sb->addSeated(24);
-
-    mainVenue->reportStatus();
-    cout << endl << endl;
-    mainVenue->close();
-
-    delete mainVenue;
-
+    venue->reportStatus();
     return 0;
 }

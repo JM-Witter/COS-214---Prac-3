@@ -1,55 +1,29 @@
 #ifndef LOUNGE_H
 #define LOUNGE_H
 
-// Concrete Composite
-
 #include "EventGroup.h"
-#include <iostream>
-#include <vector>
-#include <string>
 
-using namespace std;
-
-class Lounge : public EventGroup { //, public Observer, public Subject
+class Lounge : public EventGroup {
 public:
-	Lounge(string g) : EventGroup(g) {};
+    explicit Lounge(const std::string& name) : EventGroup(name), servicesSuspended(false) {}
 
-    void open() override {
-        cout << groupName << ": Opening Lounge" << endl;
+    void reportStatus() const override {
+        std::cout << groupName << " [services " << (servicesSuspended ? "suspended" : "available") << "]" << std::endl;
+        EventGroup::reportStatus();
+    }
 
-        for (EventComponent* c : children) {
-            c->open();
+protected:
+    void onNotice(const EventNotice& notice) override {
+        if (notice.type == NoticeType::Evacuate) {
+            servicesSuspended = true;
+            std::cout << groupName << ": services suspended for evacuation" << std::endl;
+        } else if (notice.type == NoticeType::Open) {
+            servicesSuspended = false;
         }
     }
 
-    void close() override {
-        cout << groupName << ": Closing Lounge" << endl;
-
-        for (EventComponent* c : children) {
-            c->close();
-        }
-    }
-
-    void reportStatus() const override{
-        cout << groupName << ": " << children.size() << " composites" << endl;
-
-        for (EventComponent* c : children) {
-            c->reportStatus();
-        }
-    }
-
-    int getCapacity() const override {
-        int total = 0;
-
-        for (EventComponent* c : children) {
-            total += c->getCapacity();
-        }
-
-        return total;
-    }
-
-    // Observer update 
-    // void update (...) {} 
+private:
+    bool servicesSuspended;
 };
 
-#endif 
+#endif

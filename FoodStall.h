@@ -2,45 +2,37 @@
 #define FOODSTALL_H
 
 #include "EventUnit.h"
+
 #include <iostream>
+#include <vector>
+
+using namespace std;
 
 class FoodStall : public EventUnit {
+public:
+    FoodStall(const string& name, const vector<string>& items)
+        : EventUnit(name), menu(items), opened(false), serviceSuspended(false) {}
+
+    void open() override { opened = true; serviceSuspended = false; cout << "- Food Stall: opening " << unitName << endl; }
+    void close() override { opened = false; cout << "- Food Stall: closing " << unitName << endl; }
+    void reportStatus() const override {
+        cout << "- Food Stall [" << (opened && !serviceSuspended ? "open" : "closed") << "]: " << menu.size() << " menu items" << endl;
+    }
+    int getCapacity() const override { return 2; }
+
+    void update(const EventNotice& notice) override {
+        if (notice.type == NoticeType::Evacuate) { serviceSuspended = true; close(); }
+        else if (notice.type == NoticeType::CapacityAlert) cout << "- Food Stall: switching to express queue service" << endl;
+        else if (notice.type == NoticeType::Open) open();
+        else if (notice.type == NoticeType::Close) close();
+    }
+
+    ~FoodStall() override {}
+
 private:
     vector<string> menu;
     bool opened;
-
-public:
-    FoodStall(string name, vector<string> m) : EventUnit(name), menu(m), opened(false) {}
-
-    void open() override {
-        cout << "- Food Stall: Opening up " << unitName << endl;
-        opened = true;
-    }
-
-    void close() override {
-        cout << "- Food Stall: Closing " << unitName << endl;
-        opened = false;
-    }
-
-    void reportStatus() const {
-        cout << "- Food Stall [" << (opened ? "Open" : "Closed") << "] Menu: ";
-
-
-        for (string m : menu) {
-            cout << m << ", ";
-        }
-
-        cout << endl;
-    }
-
-    int getCapacity() const {
-        return 2; // maybe 0?
-    }
-
-    ~FoodStall() {}
-
-    // Observer
-    // void update (...) {}
+    bool serviceSuspended;
 };
 
 #endif

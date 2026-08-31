@@ -2,37 +2,34 @@
 #define TEAMSET_H
 
 #include "EventUnit.h"
+
 #include <iostream>
 
 class TeamSet : public EventUnit {
-private:
-    bool paused;
-
 public:
-    TeamSet(string name) : EventUnit(name), paused(false) {}
+    explicit TeamSet(const std::string& name) : EventUnit(name), powered(false), paused(false) {}
 
-    void open() override {
-        cout << "- Team Set [" << unitName << "]: Turning on setup" << endl;
-        paused = false;
+    void open() override { powered = true; paused = false; std::cout << "- Team Set [" << unitName << "]: online" << std::endl; }
+    void close() override { powered = false; paused = true; std::cout << "- Team Set [" << unitName << "]: powered down" << std::endl; }
+    void reportStatus() const override { std::cout << "- Team Set [" << unitName << "]: " << (powered ? (paused ? "paused" : "active") : "offline") << std::endl; }
+    int getCapacity() const override { return 5; }
+
+    void update(const EventNotice& notice) override {
+        if (notice.type == NoticeType::NetworkPause || notice.type == NoticeType::ScheduleChange) {
+            paused = true;
+            std::cout << "- Team Set [" << unitName << "]: paused safely" << std::endl;
+        } else if (notice.type == NoticeType::Evacuate) {
+            close();
+        } else if (notice.type == NoticeType::Open) {
+            open();
+        }
     }
 
-    void close() override {
-        cout << "- Team Set [" << unitName << "]: Switchin off" << endl;
-        paused = true;
-    }
+    ~TeamSet() override {}
 
-    void reportStatus() const {
-        cout << "- Team Set [" << unitName << "]: " << (paused ? "Paused" : "Active") << endl;
-    }
-
-    int getCapacity() const {
-        return 5;
-    }
-
-    ~TeamSet() {}
-
-    // Observer
-    // void update (...) {}
+private:
+    bool powered;
+    bool paused;
 };
 
 #endif
