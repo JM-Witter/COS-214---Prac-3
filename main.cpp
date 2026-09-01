@@ -54,7 +54,7 @@ int main() {
     stageArea->subscribeTo(*venue);
     loungeArea->subscribeTo(*venue);
     red->subscribeTo(*stageArea);
-    red->subscribeTo(*stageArea); // Duplicate registration is intentionally harmless.
+    red->subscribeTo(*stageArea);
     blue->subscribeTo(*stageArea);
     referees->subscribeTo(*stageArea);
     stageBenches->subscribeTo(*stageArea);

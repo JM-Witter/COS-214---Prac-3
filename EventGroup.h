@@ -117,7 +117,7 @@ public:
      */
     void unsubscribeFrom(Subject& subject) {
         subject.detach(this);
-        subscriptions.erase(remove(subscriptions.begin(), subscriptions.end(), &subject), subscriptions.end());
+        subscriptions.erase(std::remove(subscriptions.begin(), subscriptions.end(), &subject), subscriptions.end());
     }
 
     /**
